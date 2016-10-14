@@ -44,6 +44,10 @@ class Usine {
 	 * Ateliers travaillent sur un stock de départ, un stock intermédiaire et un
 	 * stock d'arrivée. Les deux ateliers travaillant sur les stocks
 	 * intermédiaire et de fin se partagent la charge de travail.
+	 * Cas 4: 2 Ateliers travaillent sur un stock de départ et un stock intermédiaire,
+	 * 2 autres à ateliers travaillent sur le stock intermédiaire et un stock de fin.
+	 * Les Ateliers travaillant sur les mêmes stocks se partagent la charge de travail.
+	 * Le stock intermédaire a une capacité limitée à 1.
 	 * 
 	 * @param version
 	 *            Version de l'Usine, désignant chaque cas.

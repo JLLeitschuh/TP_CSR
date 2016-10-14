@@ -64,6 +64,7 @@ class Stock {
 	}
 
 	synchronized public void stocker4() {
+		//On attend que le stock se vide pour pouvoir le remplir
 		while (nbPieces == stockMax)
 			try {
 				wait();
@@ -75,7 +76,10 @@ class Stock {
 	}
 
 	/**
-	 * Saisir une piece sur le haut de la pile de pieces Cas 1: 2 Ateliers
+	 * Saisir une piece sur le haut de la pile de pieces 
+	 */
+	/*
+	 * Cas 1: 2 Ateliers
 	 * travaillent sur un stock de départ et un stock d'arrivée. Il ne faut pas
 	 * qu'un Atelier déstocke un Stock vide.
 	 */
@@ -85,7 +89,7 @@ class Stock {
 
 	}
 
-	/**
+	/*
 	 * Cas 2: 2 Ateliers travaillent sur un stock de départ, un stock
 	 * intermédiaire et un stock d'arrivée. Il ne faut pas qu'un atelier
 	 * déstocke un Stock vide (typiquement, le stock intermédiaire qui est vide
@@ -102,7 +106,7 @@ class Stock {
 		nbPieces--;
 	}
 
-	/**
+	/*
 	 * Cas 3: 3 Ateliers travaillent sur un stock de départ, un stock
 	 * intermédiaire et un stock d'arrivée. Les deux ateliers travaillant sur
 	 * les stocks intermédiaire et de fin se partagent la charge de travail.
@@ -117,6 +121,12 @@ class Stock {
 		nbPieces--;
 	}
 
+	/*
+	 * Cas 4: 2 Ateliers travaillent sur un stock de départ et un stock intermédiaire,
+	 * 2 autres à ateliers travaillent sur le stock intermédiaire et un stock de fin.
+	 * Les Ateliers travaillant sur les mêmes stocks se partagent la charge de travail.
+	 * Le stock intermédaire a une capacité limitée à 1.
+	 */
 	synchronized public void destocker4() {
 		while (nbPieces == 0)
 			try {
