@@ -22,7 +22,11 @@ class Stock {
 	private int stockMax;
 
 	/**
-	 * Creer un nouvel objet instance de stock
+	 * Creer un nouvel objet instance de Stock, avec une capacité infinie.
+	 * 
+	 * Le stock "infini" est en fait géré par une attente qui n'est exécutée que
+	 * si le stockMax est différent de Constante.STOCK_MAX_INFINI, cf
+	 * {@link #stocker4}
 	 * 
 	 * @param nom
 	 *            Le nom du nouveau stock
@@ -30,12 +34,23 @@ class Stock {
 	 *            Le nombre de pieces initial
 	 */
 	public Stock(String nom, int nbPieces) {
-		this.nbPieces = nbPieces;
-		this.nom = nom;
+		this(nom, nbPieces, Constantes.STOCK_MAX_INFINI);
 	}
 
+	/**
+	 * Creer un nouvel objet instance de Stock, en precisant sa capacite
+	 * maximale.
+	 * 
+	 * @param nom
+	 *            Le nom du nouveau stock
+	 * @param nbPieces
+	 *            Le nombre de pieces initial
+	 * @param stockMax
+	 *            La capacite maximale du stock
+	 */
 	public Stock(String nom, int nbPieces, int stockMax) {
-		this(nom, nbPieces);
+		this.nbPieces = nbPieces;
+		this.nom = nom;
 		this.stockMax = stockMax;
 	}
 
@@ -64,24 +79,31 @@ class Stock {
 	}
 
 	synchronized public void stocker4() {
-		//On attend que le stock se vide pour pouvoir le remplir
-		while (nbPieces == stockMax)
+		/*
+		 * Les Stocks avec un stockMax == 0 sont d'autres stocks que le stock
+		 * intermédiaire, ils ne doivent donc pas mettre en attente les Ateliers
+		 * ni ne notifier un ajout de pièce.
+		 */
+		if (stockMax != Constantes.STOCK_MAX_INFINI)
+			// On attend que le stock se vide pour pouvoir le remplir
+			while (nbPieces == stockMax)
 			try {
-				wait();
+			wait();
 			} catch (InterruptedException e) {
-				System.out.println("InterruptedException");
+			System.out.println("InterruptedException");
 			}
 		nbPieces++;
-		notifyAll();
+		
+		if (stockMax != Constantes.STOCK_MAX_INFINI)
+			notifyAll();
 	}
 
 	/**
-	 * Saisir une piece sur le haut de la pile de pieces 
+	 * Saisir une piece sur le haut de la pile de pieces
 	 */
 	/*
-	 * Cas 1: 2 Ateliers
-	 * travaillent sur un stock de départ et un stock d'arrivée. Il ne faut pas
-	 * qu'un Atelier déstocke un Stock vide.
+	 * Cas 1: 2 Ateliers travaillent sur un stock de départ et un stock
+	 * d'arrivée. Il ne faut pas qu'un Atelier déstocke un Stock vide.
 	 */
 	synchronized public void destocker() {
 		if (nbPieces != 0)
@@ -122,10 +144,11 @@ class Stock {
 	}
 
 	/*
-	 * Cas 4: 2 Ateliers travaillent sur un stock de départ et un stock intermédiaire,
-	 * 2 autres à ateliers travaillent sur le stock intermédiaire et un stock de fin.
-	 * Les Ateliers travaillant sur les mêmes stocks se partagent la charge de travail.
-	 * Le stock intermédaire a une capacité limitée à 1.
+	 * Cas 4: 2 Ateliers travaillent sur un stock de départ et un stock
+	 * intermédiaire, 2 autres à ateliers travaillent sur le stock intermédiaire
+	 * et un stock de fin. Les Ateliers travaillant sur les mêmes stocks se
+	 * partagent la charge de travail. Le stock intermédaire a une capacité
+	 * limitée à 1.
 	 */
 	synchronized public void destocker4() {
 		while (nbPieces == 0)

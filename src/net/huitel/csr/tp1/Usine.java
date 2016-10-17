@@ -19,7 +19,7 @@ class Usine {
 	 */
 	Stock stockDepart = new Stock("de depart", 10);
 
-	Stock stockIntermediaire = new Stock("intermediaire", 0);
+	Stock stockIntermediaire;
 	/**
 	 * Stock de pieces transformees
 	 */
@@ -43,11 +43,11 @@ class Usine {
 	 * de départ, un stock intermédiaire et un stock d'arrivée. Cas 3: 3
 	 * Ateliers travaillent sur un stock de départ, un stock intermédiaire et un
 	 * stock d'arrivée. Les deux ateliers travaillant sur les stocks
-	 * intermédiaire et de fin se partagent la charge de travail.
-	 * Cas 4: 2 Ateliers travaillent sur un stock de départ et un stock intermédiaire,
-	 * 2 autres à ateliers travaillent sur le stock intermédiaire et un stock de fin.
-	 * Les Ateliers travaillant sur les mêmes stocks se partagent la charge de travail.
-	 * Le stock intermédaire a une capacité limitée à 1.
+	 * intermédiaire et de fin se partagent la charge de travail. Cas 4: 2
+	 * Ateliers travaillent sur un stock de départ et un stock intermédiaire, 2
+	 * autres à ateliers travaillent sur le stock intermédiaire et un stock de
+	 * fin. Les Ateliers travaillant sur les mêmes stocks se partagent la charge
+	 * de travail. Le stock intermédaire a une capacité limitée à 1.
 	 * 
 	 * @param version
 	 *            Version de l'Usine, désignant chaque cas.
@@ -102,39 +102,83 @@ class Usine {
 	 * pour transformer une piece et affiche l'evolution de l'etat des stocks.
 	 */
 	public void fonctionner() {
-		if (mVersion < Constantes.VERSION3) {
-			// On initialise les time stamps des ateliers pour qu'ils puissent
-			// calculer leur temps d'exécution.
-			long curTime = new Date().getTime();
-			atelier1.setTimeStamp(curTime);
-			atelier2.setTimeStamp(curTime);
-			// On lance les Ateliers (les Threads)
-			atelier1.start();
-			atelier2.start();
-
-			try {
-				atelier1.join();
-				atelier2.join();
-			} catch (InterruptedException e) {
-				System.out.println("Erreur pendant l'attente de fin de travail des ateliers");
-			}
-
-			// La durée d'exécution correspond au temps le plus long entre les
-			// deux
-			// Ateliers qui travaillent en même temps.
-			long dureeExec = Math.max(atelier1.getTimeStamp(), atelier2.getTimeStamp());
-			System.out.println("\nTemps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp()
-					+ "ms et Atelier2: " + atelier2.getTimeStamp() + "ms)");
-
-			// Affichage de l'état des stocks
-			stockDepart.afficher();
-			if (mVersion == Constantes.VERSION2)
-				stockIntermediaire.afficher();
-			stockFin.afficher();
-		} else if (mVersion == Constantes.VERSION3)
+		switch (mVersion) {
+		case Constantes.VERSION1:
+			fonctionnerCas1();
+			break;
+		case Constantes.VERSION2:
+			fonctionnerCas2();
+			break;
+		case Constantes.VERSION3:
 			fonctionnerCas3();
-		else if (mVersion == Constantes.VERSION4)
+			break;
+		case Constantes.VERSION4:
 			fonctionnerCas4();
+			break;
+		default:
+			break;
+		}
+	}
+
+	
+	/**
+	 * Méthode de fonctionnement d'une Usine dans le cas 1.
+	 */
+	private void fonctionnerCas1() {
+		// On initialise les time stamps des ateliers pour qu'ils puissent
+		// calculer leur temps d'exécution.
+		long curTime = new Date().getTime();
+		atelier1.setTimeStamp(curTime);
+		atelier2.setTimeStamp(curTime);
+		// On lance les Ateliers (les Threads)
+		atelier1.start();
+		atelier2.start();
+
+		try {
+			atelier1.join();
+			atelier2.join();
+		} catch (InterruptedException e) {
+			System.out.println("Erreur pendant l'attente de fin de travail des ateliers");
+		}
+		System.out.println(Constantes.AFFICHAGE_VERSION1);
+		// La durée d'exécution correspond au temps le plus long entre les
+		// deux Ateliers qui travaillent en même temps.
+		long dureeExec = Math.max(atelier1.getTimeStamp(), atelier2.getTimeStamp());
+		System.out.println("Temps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp()
+				+ "ms et Atelier2: " + atelier2.getTimeStamp() + "ms)");
+
+		// Affichage de l'état des stocks
+		stockDepart.afficher();
+		stockFin.afficher();
+	}
+
+	
+	/**
+	 * Méthode de fonctionnement d'une Usine dans le cas 2.
+	 */
+	private void fonctionnerCas2() {
+		long curTime = new Date().getTime();
+		atelier1.setTimeStamp(curTime);
+		atelier2.setTimeStamp(curTime);
+
+		atelier1.start();
+		atelier2.start();
+
+		try {
+			atelier1.join();
+			atelier2.join();
+		} catch (InterruptedException e) {
+			System.out.println("Erreur pendant l'attente de fin de travail des ateliers");
+		}
+		System.out.println(Constantes.AFFICHAGE_VERSION2);
+
+		long dureeExec = Math.max(atelier1.getTimeStamp(), atelier2.getTimeStamp());
+		System.out.println("Temps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp()
+				+ "ms et Atelier2: " + atelier2.getTimeStamp() + "ms)");
+
+		stockDepart.afficher();
+		stockIntermediaire.afficher();
+		stockFin.afficher();
 	}
 
 	/**
@@ -145,7 +189,7 @@ class Usine {
 		atelier1.setTimeStamp(curTime);
 		atelier2.setTimeStamp(curTime);
 		atelier3.setTimeStamp(curTime);
-		// On lance les Ateliers (les Threads)
+		
 		atelier2.start();
 		atelier3.start();
 		atelier1.start();
@@ -155,14 +199,13 @@ class Usine {
 			atelier1.join();
 		} catch (InterruptedException e) {
 		}
-		// La durée d'exécution correspond au temps le plus long entre les trois
-		// Ateliers qui travaillent en même temps.
+		System.out.println(Constantes.AFFICHAGE_VERSION3);
+		
 		long dureeExec = Math.max(Math.max(atelier1.getTimeStamp(), atelier2.getTimeStamp()), atelier3.getTimeStamp());
-		System.out.println("\nTemps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp() + "ms"
-				+ "\t" + "Atelier2: " + atelier2.getTimeStamp() + "ms" + "\t" + "Atelier3: " + atelier3.getTimeStamp()
+		System.out.println("Temps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp() + "ms" + "\t"
+				+ "Atelier2: " + atelier2.getTimeStamp() + "ms" + "\t" + "Atelier3: " + atelier3.getTimeStamp()
 				+ "ms)");
-
-		// Affichage de l'état des stocks
+		
 		stockDepart.afficher();
 		stockIntermediaire.afficher();
 		stockFin.afficher();
@@ -177,7 +220,7 @@ class Usine {
 		atelier2.setTimeStamp(curTime);
 		atelier3.setTimeStamp(curTime);
 		atelier4.setTimeStamp(curTime);
-		// On lance les Ateliers (les Threads)
+		
 		atelier1.start();
 		atelier2.start();
 		atelier3.start();
@@ -189,14 +232,14 @@ class Usine {
 			atelier4.join();
 		} catch (InterruptedException e) {
 		}
-		// La durée d'exécution correspond au temps le plus long entre les quatre
-		// Ateliers qui travaillent en même temps.
-		long dureeExec = Math.max(Math.max(atelier3.getTimeStamp(), atelier4.getTimeStamp()),Math.max(atelier1.getTimeStamp(), atelier2.getTimeStamp()));
-		System.out.println("\nTemps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp() + "ms"
-				+ "\t" + "Atelier2: " + atelier2.getTimeStamp() + "ms" + "\t" + "Atelier3: " + atelier3.getTimeStamp() + "ms" + "\t" + "Atelier4: " + atelier4.getTimeStamp()
-				+ "ms)");
+		System.out.println(Constantes.AFFICHAGE_VERSION4);
+		
+		long dureeExec = Math.max(Math.max(atelier3.getTimeStamp(), atelier4.getTimeStamp()),
+				Math.max(atelier1.getTimeStamp(), atelier2.getTimeStamp()));
+		System.out.println("Temps d'exécution: " + dureeExec + " ms (Atelier1: " + atelier1.getTimeStamp() + "ms"
+				+ "\t" + "Atelier2: " + atelier2.getTimeStamp() + "ms" + "\t" + "Atelier3: " + atelier3.getTimeStamp()
+				+ "ms" + "\t" + "Atelier4: " + atelier4.getTimeStamp() + "ms)");
 
-		// Affichage de l'état des stocks
 		stockDepart.afficher();
 		stockIntermediaire.afficher();
 		stockFin.afficher();
