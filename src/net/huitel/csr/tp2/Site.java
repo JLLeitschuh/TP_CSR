@@ -101,14 +101,24 @@ class Site {
 	}
 
 
+	/**
+	 * @return Nombre de vélos en stock sur le Site this
+	 */
 	int getStock() {
 		return mStock;
 	}
 
+	/**
+	 * Setter du stock du Site this
+	 * @param stock
+	 */
 	void setStock(int stock) {
 		mStock = stock;
 	}
 
+	/**
+	 * @return Numéro du Site this
+	 */
 	public int getNumSite() {
 		return mNumSite;
 	}

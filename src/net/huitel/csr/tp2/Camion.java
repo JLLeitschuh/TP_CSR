@@ -59,10 +59,5 @@ public class Camion extends Thread {
 
 			index = (index + 1) % mSites.length;
 		}
-		/*
-		 * for (index = 0; index < mSites.length; index++) { System.out
-		 * .println("Site " + index + " -> " +
-		 * mSites[index].getNbClientsEnAttente() + " clients en attente"); }
-		 */
 	}
 }
