@@ -1,8 +1,6 @@
 package net.huitel.csr.tp2;
 
-import net.huitel.csr.tp2.interfaces.TrajetCamion;
-
-class Site implements TrajetCamion {
+class Site {
 
 	/* Constantes associees au site */
 	/** Stock initial */
@@ -23,23 +21,20 @@ class Site implements TrajetCamion {
 	/** Nombre de vélos en stock */
 	private Integer mStock;
 
-	/**
-	 * Vaut true si le site est occupé par le camion d'équilibrage ou un client,
-	 * false sinon
-	 */
-	private boolean siteEstOccupe;
 
 	Site(int numSite) {
 		mNumSite = numSite;
 		mStock = STOCK_INIT;
-		siteEstOccupe = false;
 	}
 
 	/**
 	 * Un client prend un vélo du site
 	 */
 	synchronized void prendreVelo(Client client) {
-		while (siteEstOccupe || mStock == 0)
+		/* Le while est important car un notify d'un client prenant un vélo peut potentiellement
+		 * réveiller un client en attente d'un vélo sur un autre site.
+		 */
+		while (mStock == 0)
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -52,7 +47,7 @@ class Site implements TrajetCamion {
 	 * Un client pose un vélo sur le site.
 	 */
 	synchronized void poserVelo(Client client) {
-		while (siteEstOccupe || mStock == Site.STOCK_MAX)
+		while (mStock == Site.STOCK_MAX)
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -69,17 +64,12 @@ class Site implements TrajetCamion {
 	 *            Camion d'équilibrage chargé de la gestion du stock du site
 	 */
 	synchronized void gererStockVelos(Camion camion) {
-		// Signale son arrivée sur le site
-		camionArrive();
-
 		// Charge ou décharge des vélos au site selon le besoin
 		if (mStock > BORNE_SUP)
 			chargerVelos(camion);
 		else if (mStock < Site.BORNE_INF)
 			dechargerVelos(camion);
 
-		// Signale son départ du site
-		camionPart();
 		// Signale à tous les clients que le stock à été modifié
 		notifyAll();
 	}
@@ -121,17 +111,6 @@ class Site implements TrajetCamion {
 
 	public int getNumSite() {
 		return mNumSite;
-	}
-
-	@Override
-	public void camionArrive() {
-		siteEstOccupe = true;
-	}
-
-	@Override
-	public void camionPart() {
-		siteEstOccupe = false;
-
 	}
 
 }
