@@ -21,7 +21,7 @@ public class Client extends Thread {
 	public void run() {
 		// Affichage à l'arrivée du client sur le site de début de trajet
 		System.out.println("(D) " + mDepart.getNumSite() + "\t" + "Client " + mNumClient + "\t\t\t" + mDepart.getStock());
-		mDepart.prendreVelo(this);
+		mDepart.prendreVelo();
 		// Affichage au départ du client du site de début de trajet
 		System.out.println("(D) " + mDepart.getNumSite() + "\t" + "\t\tClient " + mNumClient + "\t" + mDepart.getStock());
 		
@@ -33,7 +33,7 @@ public class Client extends Thread {
 		
 		// Affichage à l'arrivée du client au site de fin de trajet
 		System.out.println("(F) " + mArrivee.getNumSite() + "\t" + "Client " + mNumClient + "\t\t\t" + mArrivee.getStock());
-		mArrivee.poserVelo(this);
+		mArrivee.poserVelo();
 		// Affichage au départ du client du site de fin de trajet
 		System.out.println("(F) " + mArrivee.getNumSite() + "\t" + "\t\tClient " + mNumClient + "\t" + mArrivee.getStock());
 	}

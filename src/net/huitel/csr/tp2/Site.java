@@ -35,7 +35,7 @@ class Site {
 	/**
 	 * Un client prend un vélo du site
 	 */
-	synchronized void prendreVelo(Client client) {
+	synchronized void prendreVelo() {
 		/*
 		 * Le while est important car un notify d'un client prenant un vélo peut
 		 * potentiellement réveiller un client en attente d'un vélo sur un autre
@@ -53,7 +53,7 @@ class Site {
 	/**
 	 * Un client pose un vélo sur le site.
 	 */
-	synchronized void poserVelo(Client client) {
+	synchronized void poserVelo() {
 		while (mStock == Site.STOCK_MAX)
 			try {
 				wait();
