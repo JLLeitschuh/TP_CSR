@@ -4,6 +4,12 @@ import java.util.List;
 
 public class Client extends Thread{
 	private List<Rayon> rayonsAParcourir;
+	private List<Produit> chariot;
+	private boolean attenteChariot;
+	private boolean enCourses;
+	private boolean attenteProduit;
+	private boolean attenteCaisse;
+	private boolean aLaCaisse;
 	
 	
 	public Client(List<Rayon> rayons){
@@ -13,7 +19,6 @@ public class Client extends Thread{
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		super.run();
+		
 	}
 }

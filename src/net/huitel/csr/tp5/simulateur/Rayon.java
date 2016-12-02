@@ -3,24 +3,24 @@ package net.huitel.csr.tp5.simulateur;
 import net.huitel.csr.tp5.Supermarche;
 
 public class Rayon {
-	private String mProduitContenu;
+	private Produit mProduitContenu;
 	private int mStock;
 
-	public Rayon(String nomProduit) {
-		mProduitContenu = nomProduit;
+	public Rayon(Produit produit) {
+		mProduitContenu = produit;
 		mStock = Supermarche.RAYON_STOCK_INIT;
 	}
 	
 
-	public String getmProduitContenu() {
+	public Produit getmProduitContenu() {
 		return mProduitContenu;
 	}
 
-	public void setmProduitContenu(String mProduitContenu) {
+	public void setmProduitContenu(Produit mProduitContenu) {
 		this.mProduitContenu = mProduitContenu;
 	}
 
-	public int getmStock() {
+	public int getStock() {
 		return mStock;
 	}
 
