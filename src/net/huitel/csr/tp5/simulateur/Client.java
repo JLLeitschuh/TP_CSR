@@ -13,11 +13,7 @@ public class Client extends Thread {
 	private List<Produit> chariot;
 	private HashMap<Produit, Integer> mListeDeCourses;
 	private Caisse mCaisse;
-	private boolean attenteChariot;
-	private boolean enCourses;
-	private boolean attenteProduit;
-	private boolean attenteCaisse;
-	private boolean aLaCaisse;
+	private EtatClient mEtat;
 	public int numClient;
 
 	public Client(TasDeChariots chariots, List<Rayon> rayons, Caisse caisse, int num) {
@@ -47,11 +43,11 @@ public class Client extends Thread {
 	public void run() {
 		System.out.println("Client " + numClient + ": liste= " + mListeDeCourses.toString());
 		try {
-			chariots.prendreChariot();
+			chariots.prendreChariot(this);
 			faireCourses();
 			mCaisse.arriverALaCaisse(this);
 			mettreCoursesSurTapis();
-			chariots.reposerChariot();
+			chariots.reposerChariot(this);
 		} catch (InterruptedException e) {
 		}
 	}
@@ -59,8 +55,9 @@ public class Client extends Thread {
 	/**
 	 * Methode representant le parcours des rayons et la prise de tous les
 	 * produits dont le client a besoin dans chaque rayon.
+	 * @throws InterruptedException 
 	 */
-	private void faireCourses() {
+	private void faireCourses() throws InterruptedException {
 		for (Rayon rayon : rayonsAParcourir) {
 			int quantiteProduitVoulue = mListeDeCourses.get(rayon.getProduitContenu());
 			rayon.prendreProduits(this, quantiteProduitVoulue);
@@ -114,5 +111,14 @@ public class Client extends Thread {
 	public int getNumClient() {
 		return numClient;
 	}
+
+	public EtatClient getEtat() {
+		return mEtat;
+	}
+
+	public void setEtat(EtatClient mEtat) {
+		this.mEtat = mEtat;
+	}
+	
 
 }

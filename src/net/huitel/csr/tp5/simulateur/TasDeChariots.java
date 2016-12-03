@@ -22,12 +22,14 @@ public class TasDeChariots {
 		System.out.println("Tas de chariots initialisé: "+ chariots.availablePermits() + "chariots disponibles");
 	}
 	
-	public void prendreChariot() throws InterruptedException {
+	public void prendreChariot(Client client) throws InterruptedException {
+		client.setEtat(EtatClient.ATTENTE_CHARIOT);
 		chariots.acquire();
+		client.setEtat(EtatClient.EN_COURSE);
 		System.out.println("\nChariots restants: "+chariots.availablePermits());
 	}
 
-	public void reposerChariot() {
+	public void reposerChariot(Client client) {
 		chariots.release();
 		System.out.println("\nChariots restants: "+chariots.availablePermits());
 	}

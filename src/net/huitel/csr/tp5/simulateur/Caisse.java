@@ -80,7 +80,9 @@ public class Caisse {
 		// Lorsqu'un client arrive, le semaphore semaExclusionMutuelleAccesTapis
 		// lui donne l'acces au tapis s'il n'y a pas un autre client arrive
 		// avant lui.
+		client.setEtat(EtatClient.ATTENTE_CAISSE);
 		semaExclusionMutuelleAccesTapis.acquire();
+		client.setEtat(EtatClient.A_LA_CAISSE);
 		System.out.println(
 				"Client " + client.getNumClient() + " - " + semaExclusionMutuelleAccesTapis.availablePermits());
 		// Une fois l'acces au tapis obtenu, le client attend que le caissier
