@@ -1,6 +1,6 @@
 package net.huitel.csr.tp5.simulateur;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.huitel.csr.tp5.Supermarche;
@@ -8,12 +8,11 @@ import net.huitel.csr.tp5.Supermarche;
 public class ChefRayon extends Thread {
 
 	private List<Rayon> rayons;
-	private List<Integer> produitsPortes;
+	private HashMap<Produit, Integer> produitsPortes;
 
 	public ChefRayon(List<Rayon> rayons) {
-		super();
 		this.rayons = rayons;
-		produitsPortes = new ArrayList<>(rayons.size());
+		produitsPortes = new HashMap<>();
 	}
 
 	/**
@@ -25,9 +24,10 @@ public class ChefRayon extends Thread {
 	 */
 	private void faireLePlein() throws InterruptedException {
 
-		for (int i = 0; i < produitsPortes.size(); i++) {
-			produitsPortes.set(i, Supermarche.NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON);
+		for (Rayon rayon : rayons) {
+			produitsPortes.put(rayon.getProduitContenu(), Supermarche.NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON);
 		}
+		System.out.println("Chef (PLEIN)");
 		sleep(Supermarche.TPS_CHEF_RAYON_FAIRE_PLEIN_ARTICLES);
 	}
 
@@ -36,23 +36,33 @@ public class ChefRayon extends Thread {
 	 * @throws InterruptedException
 	 */
 	private void gererStocksRayons() throws InterruptedException {
-		int i = 0;
-		while (true) {
-			faireLePlein();
-			sleep(Supermarche.TPS_CHEF_RAYON_MARCHE_ENTRE_RAYONS);
-			while (produitsPortes.get(i) > 0 && rayons.get(i).getStock() < Supermarche.RAYON_STOCK_MAX) {
-				rayons.get(i).ajouterProduit();
-				notifyAll();
-				produitsPortes.set(i, produitsPortes.get(i)-1);
-				sleep(Supermarche.TPS_CHEF_RAYON_MARCHE_ENTRE_RAYONS);
-			}
+		faireLePlein();
+		sleep(Supermarche.TPS_CHEF_RAYON_MARCHE_ENTRE_RAYONS);
+
+		for (int index = 0; index < rayons.size(); index++) {
+			Rayon rayonCourant = rayons.get(index);
+			System.out.println("\t\tRayon '"+rayonCourant.getProduitContenu().toString()+"': "+rayonCourant.getStock());
+			rayonCourant.gererStockRayon(this);
 		}
+
+		sleep(Supermarche.TPS_CHEF_RAYON_MARCHE_ENTRE_RAYONS);
+
+	}
+
+	public void decrementerStock(Produit produit) {
+		produitsPortes.put(produit, produitsPortes.get(produit) - 1);
+	}
+
+	public HashMap<Produit, Integer> getProduitsPortes() {
+		return produitsPortes;
 	}
 
 	@Override
 	public void run() {
 		try {
-			gererStocksRayons();
+			while (true) {
+				gererStocksRayons();
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -10,9 +10,8 @@ public class Rayon {
 		mProduitContenu = produit;
 		mStock = Supermarche.RAYON_STOCK_INIT;
 	}
-	
 
-	public Produit getmProduitContenu() {
+	public Produit getProduitContenu() {
 		return mProduitContenu;
 	}
 
@@ -31,7 +30,7 @@ public class Rayon {
 	/**
 	 * Un client prend un produit dans le rayon
 	 */
-	synchronized void prendreProduit() {
+	synchronized public void prendreProduit() {
 		while (mStock == 0)
 			try {
 				wait();
@@ -40,11 +39,22 @@ public class Rayon {
 		mStock--;
 		notify();
 	}
-	
+
+	synchronized public void gererStockRayon(ChefRayon chef) {
+		while (chef.getProduitsPortes().get(this.getProduitContenu()) > 0 && getStock() < Supermarche.RAYON_STOCK_MAX) {
+			System.out.println(
+					"Chef " + mProduitContenu.toString() + ": " + chef.getProduitsPortes().get(mProduitContenu));
+			ajouterProduit();
+			chef.decrementerStock(this.getProduitContenu());
+			System.out.println("\t\tRayon '" + this.getProduitContenu().toString() + "': " + mStock);
+		}
+		notifyAll();
+	}
+
 	/**
 	 * Un chef de rayon ajoute un produit au rayon.
 	 */
-	synchronized void ajouterProduit() {
+	private void ajouterProduit() {
 		while (mStock == Supermarche.RAYON_STOCK_MAX)
 			try {
 				wait();
