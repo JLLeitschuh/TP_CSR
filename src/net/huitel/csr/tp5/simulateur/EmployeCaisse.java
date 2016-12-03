@@ -1,5 +1,11 @@
 package net.huitel.csr.tp5.simulateur;
 
+/**
+ * Classe representant un caissier.
+ * Il gere la caisse tant que son Thread n'est pas tue manuellement.
+ * @author alan
+ *
+ */
 public class EmployeCaisse extends Thread {
 	private Caisse mCaisse;
 
@@ -11,7 +17,10 @@ public class EmployeCaisse extends Thread {
 	@Override
 	public void run() {
 		while(true){
-			mCaisse.gererCaisse();
+			try {
+				mCaisse.gererCaisse();
+			} catch (InterruptedException e) {
+			}
 		}
 		
 	}

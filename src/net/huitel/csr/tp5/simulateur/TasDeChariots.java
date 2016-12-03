@@ -15,18 +15,20 @@ import net.huitel.csr.tp5.Supermarche;
  *
  */
 public class TasDeChariots {
-	Semaphore chariots = new Semaphore(Supermarche.NB_CHARIOTS);
-
-	public void prendreChariot() {
-		try {
-			chariots.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Semaphore chariots;
+	
+	public TasDeChariots(){
+		chariots = new Semaphore(Supermarche.NB_CHARIOTS);
+		System.out.println("Tas de chariots initialisé: "+ chariots.availablePermits() + "chariots disponibles");
+	}
+	
+	public void prendreChariot() throws InterruptedException {
+		chariots.acquire();
+		System.out.println("\nChariots restants: "+chariots.availablePermits());
 	}
 
 	public void reposerChariot() {
 		chariots.release();
+		System.out.println("\nChariots restants: "+chariots.availablePermits());
 	}
 }

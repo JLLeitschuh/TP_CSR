@@ -30,7 +30,7 @@ public class Rayon {
 	/**
 	 * Un client prend un produit dans le rayon
 	 */
-	synchronized public void prendreProduit() {
+	public void prendreProduit() {
 		while (mStock == 0)
 			try {
 				wait();
@@ -40,13 +40,23 @@ public class Rayon {
 		notify();
 	}
 
+	synchronized public void prendreProduits(Client client, int quantiteVoulue) {
+		for (int index = 0; index < quantiteVoulue; index++) {
+			//System.out.println("\t\t\t\t\tClient " + client.numClient + "-" + mProduitContenu.toString() + ": "
+			//		+ client.nombreProduits(mProduitContenu));
+			prendreProduit();
+			client.getChariot().add(mProduitContenu);
+			//System.out.println("\t\tRayon '" + this.getProduitContenu().toString() + "': " + mStock);
+		}
+	}
+
 	synchronized public void gererStockRayon(ChefRayon chef) {
 		while (chef.getProduitsPortes().get(this.getProduitContenu()) > 0 && getStock() < Supermarche.RAYON_STOCK_MAX) {
-			System.out.println(
-					"Chef " + mProduitContenu.toString() + ": " + chef.getProduitsPortes().get(mProduitContenu));
+			//System.out.println(
+			//		"Chef " + mProduitContenu.toString() + ": " + chef.getProduitsPortes().get(mProduitContenu));
 			ajouterProduit();
 			chef.decrementerStock(this.getProduitContenu());
-			System.out.println("\t\tRayon '" + this.getProduitContenu().toString() + "': " + mStock);
+			//System.out.println("\t\tRayon '" + this.getProduitContenu().toString() + "': " + mStock);
 		}
 		notifyAll();
 	}

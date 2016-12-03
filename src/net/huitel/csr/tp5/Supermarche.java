@@ -6,8 +6,10 @@ import java.util.List;
 import net.huitel.csr.tp5.simulateur.Caisse;
 import net.huitel.csr.tp5.simulateur.ChefRayon;
 import net.huitel.csr.tp5.simulateur.Client;
+import net.huitel.csr.tp5.simulateur.EmployeCaisse;
 import net.huitel.csr.tp5.simulateur.Produit;
 import net.huitel.csr.tp5.simulateur.Rayon;
+import net.huitel.csr.tp5.simulateur.TasDeChariots;
 
 public class Supermarche {
 	/**
@@ -65,13 +67,16 @@ public class Supermarche {
 		rayons.add(new Rayon(Produit.BEURRE));
 		rayons.add(new Rayon(Produit.LAIT));
 		
+		TasDeChariots chariots = new TasDeChariots();
 		Caisse caisse = new Caisse();
+		(new EmployeCaisse(caisse)).start();
+		(new ChefRayon(rayons)).start();
 		
 		for(int i=0; i<20; i++){
-			(new Client(rayons)).start();
+			(new Client(chariots, rayons, caisse, i)).start();
 		}
 		
-		(new ChefRayon(rayons)).run();
+		
 		
 	}
 }

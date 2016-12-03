@@ -27,7 +27,7 @@ public class ChefRayon extends Thread {
 		for (Rayon rayon : rayons) {
 			produitsPortes.put(rayon.getProduitContenu(), Supermarche.NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON);
 		}
-		System.out.println("Chef (PLEIN)");
+		//System.out.println("Chef (PLEIN)");
 		sleep(Supermarche.TPS_CHEF_RAYON_FAIRE_PLEIN_ARTICLES);
 	}
 
@@ -41,7 +41,7 @@ public class ChefRayon extends Thread {
 
 		for (int index = 0; index < rayons.size(); index++) {
 			Rayon rayonCourant = rayons.get(index);
-			System.out.println("\t\tRayon '"+rayonCourant.getProduitContenu().toString()+"': "+rayonCourant.getStock());
+			//System.out.println("\t\tRayon '"+rayonCourant.getProduitContenu().toString()+"': "+rayonCourant.getStock());
 			rayonCourant.gererStockRayon(this);
 		}
 
