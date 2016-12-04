@@ -2,7 +2,6 @@ package net.huitel.csr.tp3;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 
 public class FTPServeurThread extends Thread {
