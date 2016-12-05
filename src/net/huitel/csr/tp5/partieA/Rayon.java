@@ -1,7 +1,5 @@
 package net.huitel.csr.tp5.partieA;
 
-import java.net.PasswordAuthentication;
-
 import net.huitel.csr.tp5.Supermarche;
 import net.huitel.csr.tp5.partieA.enumerations.EtatClient;
 import net.huitel.csr.tp5.partieA.enumerations.Produit;
@@ -77,14 +75,14 @@ public class Rayon {
 	 */
 	public void prendreProduits(Client client, int quantiteVoulue) throws InterruptedException {
 		for (int index = 0; index < quantiteVoulue; index++) {
-			// System.out.println("\t\t\t\t\tClient " + client.numClient + "-" +
-			// mProduitContenu.toString() + ": "
-			// + client.nombreProduits(mProduitContenu));
+			 System.out.println("\t\t\t\t\tClient " + client.getIdClient() + "-" +
+			 mProduitContenu.toString() + ": "
+			 + client.nombreProduits(mProduitContenu));
 			prendreProduit(client);
 			client.getChariot().add(mProduitContenu);
 			client.getListeCourses().put(mProduitContenu, client.getListeCourses().get(mProduitContenu) - 1);
-			// System.out.println("\t\tRayon '" +
-			// this.getProduitContenu().toString() + "': " + mStock);
+			 System.out.println("\t\tRayon '" +
+			 this.getProduitContenu().toString() + "': " + mStock);
 		}
 	}
 
@@ -100,13 +98,12 @@ public class Rayon {
 		// Si le chef de rayons a sur lui au moins un produit que le rayon
 		// propose et que le stock du rayon n'est pas plein
 		while (chef.getProduitsPortes().get(this.getProduitContenu()) > 0 && getStock() < Supermarche.RAYON_STOCK_MAX) {
-			// System.out.println(
-			// "Chef " + mProduitContenu.toString() + ": " +
-			// chef.getProduitsPortes().get(mProduitContenu));
-			ajouterProduit();
-			chef.decrementerStock(this.getProduitContenu());
-			// System.out.println("\t\tRayon '" +
-			// this.getProduitContenu().toString() + "': " + mStock);
+			 System.out.println(
+			 "Chef " + mProduitContenu.toString() + ": " +
+			 chef.getProduitsPortes().get(mProduitContenu));
+			ajouterProduit(chef);
+			 System.out.println("\t\tRayon '" +
+			 this.getProduitContenu().toString() + "': " + mStock);
 		}
 	}
 
@@ -115,10 +112,11 @@ public class Rayon {
 	 * 
 	 * @throws InterruptedException
 	 */
-	synchronized private void ajouterProduit() throws InterruptedException {
-		while (mStock == Supermarche.RAYON_STOCK_MAX)
-			wait();
-		mStock++;
-		notifyAll();
+	synchronized private void ajouterProduit(ChefRayon chef) throws InterruptedException {
+		if (mStock < Supermarche.RAYON_STOCK_MAX) {
+			mStock++;
+			chef.decrementerStock(this.getProduitContenu());
+			notifyAll();
+		}
 	}
 }

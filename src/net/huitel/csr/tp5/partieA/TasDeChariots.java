@@ -11,7 +11,7 @@ import net.huitel.csr.tp5.partieA.threads.Client;
  * Classe representant le tas de chariots a l'entree du supermarche. Pour
  * resoudre ce probleme, nous utilisons un semaphore initialise au nombre de
  * chariots du magasin. Chaque client viendra prendre un chariot utilisera la
- * mehode {@link Semaphore#acquire()} du semaphore et il utilisera
+ * methode {@link Semaphore#acquire()} du semaphore et il utilisera
  * {@link Semaphore##release()} pour rendre un chariot. Apres avoir repose son
  * chariot, le client est retire de la liste de clients du supermarche
  * 
