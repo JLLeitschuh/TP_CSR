@@ -1,4 +1,4 @@
-package net.huitel.csr.tp5.partieB.resources;
+package net.huitel.csr.tp5.partieB.ressources;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.huitel.csr.tp5.partieA.Rayon;
+import net.huitel.csr.tp5.partieA.ressources.Rayon;
 import net.huitel.csr.tp5.partieA.threads.Client;
 import net.huitel.csr.tp5.partieB.ConstantesApiRest;
 

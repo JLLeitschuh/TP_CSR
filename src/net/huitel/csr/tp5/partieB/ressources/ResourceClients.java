@@ -1,4 +1,4 @@
-package net.huitel.csr.tp5.partieB.resources;
+package net.huitel.csr.tp5.partieB.ressources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import net.huitel.csr.tp5.StructureSupermarche;
+import net.huitel.csr.tp5.partieA.StructureSupermarche;
 import net.huitel.csr.tp5.partieA.threads.Client;
 import net.huitel.csr.tp5.partieB.SupermarcheRestApp;
 

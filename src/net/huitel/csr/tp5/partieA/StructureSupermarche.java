@@ -1,11 +1,11 @@
-package net.huitel.csr.tp5;
+package net.huitel.csr.tp5.partieA;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.huitel.csr.tp5.partieA.Caisse;
-import net.huitel.csr.tp5.partieA.Rayon;
-import net.huitel.csr.tp5.partieA.TasDeChariots;
+import net.huitel.csr.tp5.partieA.ressources.Caisse;
+import net.huitel.csr.tp5.partieA.ressources.Rayon;
+import net.huitel.csr.tp5.partieA.ressources.TasDeChariots;
 import net.huitel.csr.tp5.partieA.threads.Client;
 
 /**

@@ -1,9 +1,9 @@
-package net.huitel.csr.tp5.partieA;
+package net.huitel.csr.tp5.partieA.ressources;
 
 import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
-import net.huitel.csr.tp5.Supermarche;
+import net.huitel.csr.tp5.partieA.Supermarche;
 import net.huitel.csr.tp5.partieA.enumerations.EtatClient;
 import net.huitel.csr.tp5.partieA.enumerations.Produit;
 import net.huitel.csr.tp5.partieA.threads.Client;

@@ -1,6 +1,6 @@
 package net.huitel.csr.tp5.partieA.threads;
 
-import net.huitel.csr.tp5.partieA.Caisse;
+import net.huitel.csr.tp5.partieA.ressources.Caisse;
 
 /**
  * Classe representant un caissier.

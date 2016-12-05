@@ -5,10 +5,10 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-import net.huitel.csr.tp5.StructureSupermarche;
-import net.huitel.csr.tp5.partieB.resources.ResourceClient;
-import net.huitel.csr.tp5.partieB.resources.ResourceClients;
-import net.huitel.csr.tp5.partieB.resources.ResourceStocks;
+import net.huitel.csr.tp5.partieA.StructureSupermarche;
+import net.huitel.csr.tp5.partieB.ressources.ResourceClient;
+import net.huitel.csr.tp5.partieB.ressources.ResourceClients;
+import net.huitel.csr.tp5.partieB.ressources.ResourceStocks;
 
 public class SupermarcheRestApp extends Application {
 	/**

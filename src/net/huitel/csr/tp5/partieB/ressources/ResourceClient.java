@@ -1,4 +1,4 @@
-package net.huitel.csr.tp5.partieB.resources;
+package net.huitel.csr.tp5.partieB.ressources;
 
 import java.util.ArrayList;
 

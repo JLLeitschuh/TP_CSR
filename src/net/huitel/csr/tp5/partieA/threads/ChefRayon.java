@@ -3,9 +3,9 @@ package net.huitel.csr.tp5.partieA.threads;
 import java.util.HashMap;
 import java.util.List;
 
-import net.huitel.csr.tp5.Supermarche;
-import net.huitel.csr.tp5.partieA.Rayon;
+import net.huitel.csr.tp5.partieA.Supermarche;
 import net.huitel.csr.tp5.partieA.enumerations.Produit;
+import net.huitel.csr.tp5.partieA.ressources.Rayon;
 
 /**
  * Classe representant le chef de rayons du supermarche.
