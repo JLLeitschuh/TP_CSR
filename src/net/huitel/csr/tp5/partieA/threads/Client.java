@@ -1,26 +1,29 @@
-package net.huitel.csr.tp5.simulateur;
+package net.huitel.csr.tp5.partieA.threads;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import net.huitel.csr.tp5.StructureSupermarche;
 import net.huitel.csr.tp5.Supermarche;
+import net.huitel.csr.tp5.partieA.Caisse;
+import net.huitel.csr.tp5.partieA.Rayon;
+import net.huitel.csr.tp5.partieA.TasDeChariots;
+import net.huitel.csr.tp5.partieA.enumerations.EtatClient;
+import net.huitel.csr.tp5.partieA.enumerations.Produit;
 
 public class Client extends Thread {
-	private TasDeChariots chariots;
-	private List<Rayon> rayonsAParcourir;
+	StructureSupermarche mStructureSupermarche;
 	private List<Produit> chariot;
 	private HashMap<Produit, Integer> mListeDeCourses;
-	private Caisse mCaisse;
 	private EtatClient mEtat;
-	public int numClient;
+	private int idClient;
 
-	public Client(TasDeChariots chariots, List<Rayon> rayons, Caisse caisse, int num) {
-		this.chariots = chariots;
-		rayonsAParcourir = rayons;
-		mCaisse = caisse;
-		numClient = num;
+	public Client(StructureSupermarche structureSupermarche, int id) {
+		super();
+		mStructureSupermarche = structureSupermarche;
+		idClient = id;
 		mListeDeCourses = listeCoursesAleatoire();
 		chariot = new ArrayList<>();
 	}
@@ -41,13 +44,13 @@ public class Client extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Client " + numClient + ": liste= " + mListeDeCourses.toString());
+		System.out.println("Client " + idClient + ": liste= " + mListeDeCourses.toString());
 		try {
-			chariots.prendreChariot(this);
+			mStructureSupermarche.getChariots().prendreChariot(this);
 			faireCourses();
-			mCaisse.arriverALaCaisse(this);
+			mStructureSupermarche.getCaisse().arriverALaCaisse(this);
 			mettreCoursesSurTapis();
-			chariots.reposerChariot(this);
+			mStructureSupermarche.getChariots().reposerChariot(this);
 		} catch (InterruptedException e) {
 		}
 	}
@@ -58,11 +61,11 @@ public class Client extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private void faireCourses() throws InterruptedException {
-		for (Rayon rayon : rayonsAParcourir) {
+		for (Rayon rayon : mStructureSupermarche.getRayons()) {
 			int quantiteProduitVoulue = mListeDeCourses.get(rayon.getProduitContenu());
 			rayon.prendreProduits(this, quantiteProduitVoulue);
 		}
-		System.out.println("Courses client " + numClient + " terminees");
+		System.out.println("Courses client " + idClient + " terminees");
 	}
 
 	/**
@@ -78,16 +81,16 @@ public class Client extends Thread {
 		// produits de son chariot sur le tapis
 		while (!chariot.isEmpty()) {
 			sleep(Supermarche.TPS_POSER_ARTICLE_SUR_TAPIS);
-			System.out.println("Client " + numClient + " met " + chariot.get(0) + " sur le tapis");
+			System.out.println("Client " + idClient + " met " + chariot.get(0) + " sur le tapis");
 
-			mCaisse.mettreProduitSurTapis(chariot.get(0));
+			mStructureSupermarche.getCaisse().mettreProduitSurTapis(chariot.get(0));
 			chariot.remove(0);
 
-			System.out.println("chariot client " + numClient + ": " + chariot.toString() + "\n");
+			System.out.println("chariot client " + idClient + ": " + chariot.toString() + "\n");
 		}
 		// Lorsque le client a vide son chariot, il place sur le tapis le
 		// marqueur de client suivant
-		mCaisse.mettreProduitSurTapis(Produit.MARQUEUR_CLIENT_SUIVANT);
+		mStructureSupermarche.getCaisse().mettreProduitSurTapis(Produit.MARQUEUR_CLIENT_SUIVANT);
 	}
 
 	/**
@@ -108,8 +111,8 @@ public class Client extends Thread {
 		return chariot;
 	}
 
-	public int getNumClient() {
-		return numClient;
+	public int getIdClient() {
+		return idClient;
 	}
 
 	public EtatClient getEtat() {
@@ -118,6 +121,10 @@ public class Client extends Thread {
 
 	public void setEtat(EtatClient mEtat) {
 		this.mEtat = mEtat;
+	}
+	
+	public HashMap<Produit, Integer> getListeCourses(){
+		return mListeDeCourses;
 	}
 	
 

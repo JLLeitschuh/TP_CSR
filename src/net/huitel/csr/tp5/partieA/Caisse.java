@@ -1,9 +1,12 @@
-package net.huitel.csr.tp5.simulateur;
+package net.huitel.csr.tp5.partieA;
 
 import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
 import net.huitel.csr.tp5.Supermarche;
+import net.huitel.csr.tp5.partieA.enumerations.EtatClient;
+import net.huitel.csr.tp5.partieA.enumerations.Produit;
+import net.huitel.csr.tp5.partieA.threads.Client;
 
 /**
  * Classe gerant la caisse du magasin. Elle resout trois problemes de synchro:
@@ -64,7 +67,7 @@ public class Caisse {
 		while (scannerProduit()) {
 		}
 		// Paiement
-		System.out.println("Dernier article rencontré");
+		System.out.println("Dernier article rencontré, passage au client suivant");
 		semaExclusionMutuelleAccesTapis.release();
 	}
 
@@ -74,9 +77,9 @@ public class Caisse {
 	 * @throws InterruptedException
 	 */
 	public void arriverALaCaisse(Client client) throws InterruptedException {
-		System.out.println("Client " + client.getNumClient() + " arrive a la caisse");
+		System.out.println("Client " + client.getIdClient() + " attend a la caisse");
 		System.out.println(
-				"Client " + client.getNumClient() + " - " + semaExclusionMutuelleAccesTapis.availablePermits());
+				"Client " + client.getIdClient() + " - " + semaExclusionMutuelleAccesTapis.availablePermits());
 		// Lorsqu'un client arrive, le semaphore semaExclusionMutuelleAccesTapis
 		// lui donne l'acces au tapis s'il n'y a pas un autre client arrive
 		// avant lui.
@@ -84,7 +87,7 @@ public class Caisse {
 		semaExclusionMutuelleAccesTapis.acquire();
 		client.setEtat(EtatClient.A_LA_CAISSE);
 		System.out.println(
-				"Client " + client.getNumClient() + " - " + semaExclusionMutuelleAccesTapis.availablePermits());
+				"\n==================\nClient " + client.getIdClient() + " passe en caisse");
 		// Une fois l'acces au tapis obtenu, le client attend que le caissier
 		// soit pret a le recevoir.
 		clientAttendCaissier();
@@ -153,9 +156,9 @@ public class Caisse {
 	synchronized private boolean scannerProduit() throws InterruptedException {
 		while (tapis.size() == 0)
 			wait();
-		System.out.println("Avant scan article - tapis: " + tapis.toString());
+		System.out.println("Avant scan - tapis: " + tapis.toString());
 		Produit articleScanne = tapis.removeFirst();
-		System.out.println("Après scan article - tapis: " + tapis.toString());
+		System.out.println("Après scan - tapis: " + tapis.toString());
 		notifyAll();
 		return articleScanne != Produit.MARQUEUR_CLIENT_SUIVANT;
 	}

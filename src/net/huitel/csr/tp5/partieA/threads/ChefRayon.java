@@ -1,10 +1,18 @@
-package net.huitel.csr.tp5.simulateur;
+package net.huitel.csr.tp5.partieA.threads;
 
 import java.util.HashMap;
 import java.util.List;
 
 import net.huitel.csr.tp5.Supermarche;
+import net.huitel.csr.tp5.partieA.Rayon;
+import net.huitel.csr.tp5.partieA.enumerations.Produit;
 
+/**
+ * Classe representant le chef de rayons du supermarche.
+ * 
+ * @author alan
+ *
+ */
 public class ChefRayon extends Thread {
 
 	private List<Rayon> rayons;
@@ -16,9 +24,9 @@ public class ChefRayon extends Thread {
 	}
 
 	/**
-	 * Represente pour le chef de rayon le fait d'aller dans l'entrepot pour
-	 * chercher {@link Supermarche#NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON}
-	 * artcles de chaque produit disponible pour renflouer les rayons.
+	 * Represente le fait d'aller dans l'entrepot pour remplir ses stocks de
+	 * {@link Supermarche#NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON} de
+	 * chaque produit disponible pour renflouer les rayons.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -27,11 +35,14 @@ public class ChefRayon extends Thread {
 		for (Rayon rayon : rayons) {
 			produitsPortes.put(rayon.getProduitContenu(), Supermarche.NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON);
 		}
-		//System.out.println("Chef (PLEIN)");
+		// System.out.println("Chef (PLEIN)");
 		sleep(Supermarche.TPS_CHEF_RAYON_FAIRE_PLEIN_ARTICLES);
 	}
 
 	/**
+	 * Travail du chef de rayon. Il doit faire le plein puis parcourir les
+	 * rayons pour les remplir si besoin. Le temps de ses actions est marque
+	 * ici.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -41,7 +52,9 @@ public class ChefRayon extends Thread {
 
 		for (int index = 0; index < rayons.size(); index++) {
 			Rayon rayonCourant = rayons.get(index);
-			//System.out.println("\t\tRayon '"+rayonCourant.getProduitContenu().toString()+"': "+rayonCourant.getStock());
+			// System.out.println("\t\tRayon
+			// '"+rayonCourant.getProduitContenu().toString()+"':
+			// "+rayonCourant.getStock());
 			rayonCourant.gererStockRayon(this);
 		}
 
@@ -49,6 +62,13 @@ public class ChefRayon extends Thread {
 
 	}
 
+	/**
+	 * Decremente la quantite du produit en parametre que le chef de rayon porte
+	 * sur lui
+	 * 
+	 * @param produit
+	 *            Produit dont la quantite est a decrementer
+	 */
 	public void decrementerStock(Produit produit) {
 		produitsPortes.put(produit, produitsPortes.get(produit) - 1);
 	}

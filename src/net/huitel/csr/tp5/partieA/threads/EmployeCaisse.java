@@ -1,4 +1,6 @@
-package net.huitel.csr.tp5.simulateur;
+package net.huitel.csr.tp5.partieA.threads;
+
+import net.huitel.csr.tp5.partieA.Caisse;
 
 /**
  * Classe representant un caissier.

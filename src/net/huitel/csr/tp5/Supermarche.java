@@ -3,14 +3,26 @@ package net.huitel.csr.tp5;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.huitel.csr.tp5.simulateur.Caisse;
-import net.huitel.csr.tp5.simulateur.ChefRayon;
-import net.huitel.csr.tp5.simulateur.Client;
-import net.huitel.csr.tp5.simulateur.EmployeCaisse;
-import net.huitel.csr.tp5.simulateur.Produit;
-import net.huitel.csr.tp5.simulateur.Rayon;
-import net.huitel.csr.tp5.simulateur.TasDeChariots;
+import org.restlet.Application;
+import org.restlet.Component;
+import org.restlet.Context;
+import org.restlet.data.Protocol;
 
+import net.huitel.csr.tp5.partieA.Caisse;
+import net.huitel.csr.tp5.partieA.Rayon;
+import net.huitel.csr.tp5.partieA.TasDeChariots;
+import net.huitel.csr.tp5.partieA.enumerations.Produit;
+import net.huitel.csr.tp5.partieA.threads.ChefRayon;
+import net.huitel.csr.tp5.partieA.threads.Client;
+import net.huitel.csr.tp5.partieA.threads.EmployeCaisse;
+import net.huitel.csr.tp5.partieB.ConstantesApiRest;
+import net.huitel.csr.tp5.partieB.SupermarcheRestApp;
+
+/**
+ * 
+ * @author alan
+ * @author gdenoual
+ */
 public class Supermarche {
 	/**
 	 * Stock initial present dans les rayons à l’ouverture du magasin
@@ -38,11 +50,11 @@ public class Supermarche {
 	 * par un chef de rayon
 	 */
 	public static final int TPS_CHEF_RAYON_FAIRE_PLEIN_ARTICLES = 500;
-	
+
 	/**
 	 * Temps, en ms, de l'operation de depot d'un article sur le tapis de caisse
 	 */
-	public static final int TPS_POSER_ARTICLE_SUR_TAPIS = 20;
+	public static final int TPS_POSER_ARTICLE_SUR_TAPIS = 200;
 
 	/**
 	 * Nombre maximum d’objets presents sur le tapis de caisse
@@ -59,24 +71,43 @@ public class Supermarche {
 	 * à la fois
 	 */
 	public static final int NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON = 5;
-	
-	public static void main(String[] args) {
+
+	/**
+	 * Cree une liste de rayons
+	 * 
+	 * @return Liste de rayons
+	 */
+	private static List<Rayon> genererRayons() {
 		List<Rayon> rayons = new ArrayList<>();
 		rayons.add(new Rayon(Produit.SUCRE));
 		rayons.add(new Rayon(Produit.FARINE));
 		rayons.add(new Rayon(Produit.BEURRE));
 		rayons.add(new Rayon(Produit.LAIT));
-		
-		TasDeChariots chariots = new TasDeChariots();
+		return rayons;
+	}
+
+	public static void main(String[] args) throws Exception {
+		ArrayList<Client> clients = new ArrayList<>();
+		List<Rayon> rayons = genererRayons();
 		Caisse caisse = new Caisse();
+
+		StructureSupermarche structure = new StructureSupermarche(new TasDeChariots(clients), rayons, caisse, clients);
+
 		(new EmployeCaisse(caisse)).start();
 		(new ChefRayon(rayons)).start();
-		
-		for(int i=0; i<20; i++){
-			(new Client(chariots, rayons, caisse, i)).start();
-		}
-		
-		
-		
+
+		// Create a component
+		Component component = new Component();
+		Context context = component.getContext().createChildContext();
+		component.getServers().add(Protocol.HTTP, ConstantesApiRest.PORT_APPLICATION);
+
+		// Create an application
+		Application application = new SupermarcheRestApp(structure, context);
+
+		// Add the backend into component's context
+		component.getDefaultHost().attach(application);
+		// Start the component
+		component.start();
+
 	}
 }
