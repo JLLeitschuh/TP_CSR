@@ -7,9 +7,7 @@ import java.util.Random;
 
 import net.huitel.csr.tp5.StructureSupermarche;
 import net.huitel.csr.tp5.Supermarche;
-import net.huitel.csr.tp5.partieA.Caisse;
 import net.huitel.csr.tp5.partieA.Rayon;
-import net.huitel.csr.tp5.partieA.TasDeChariots;
 import net.huitel.csr.tp5.partieA.enumerations.EtatClient;
 import net.huitel.csr.tp5.partieA.enumerations.Produit;
 

@@ -1,12 +1,10 @@
 package net.huitel.csr.tp5.partieB.resources;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -32,7 +30,7 @@ public class ResourceClients extends ServerResource {
 	 * @return Representation JSON des clients du supermarche
 	 * @throws JSONException
 	 */
-	@Get("json")
+	@Get()
 	public Representation getClients() throws JSONException {
 
 		StructureSupermarche structureSupermarche = ((SupermarcheRestApp) getApplication()).getStructureSupermarche();
@@ -54,7 +52,6 @@ public class ResourceClients extends ServerResource {
 	@Post()
 	synchronized public Representation creerClient() throws JSONException {
 		StructureSupermarche structureSupermarche = ((SupermarcheRestApp) getApplication()).getStructureSupermarche();
-		Collection<JSONObject> clientsJson = new ArrayList<JSONObject>();
 		Client client;
 
 		// Instanciation et lancement d'un nouveau thread client

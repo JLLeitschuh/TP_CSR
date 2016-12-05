@@ -27,7 +27,7 @@ public class ResourceClient extends ServerResource {
 	 * @return Representation JSON d'un client
 	 * @throws JSONException
 	 */
-	@Get("json")
+	@Get()
 	public Representation getClient() throws JSONException {
 		String idClientString = (String) getRequest().getAttributes().get(ConstantesApiRest.ID_CLIENT);
 		int idClient = Integer.valueOf(idClientString);

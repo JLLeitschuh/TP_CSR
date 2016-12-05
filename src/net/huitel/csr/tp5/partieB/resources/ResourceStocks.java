@@ -26,7 +26,7 @@ public class ResourceStocks extends ServerResource {
 	 * @return Representation JSON de l'etat du stock des rayons du supermarche
 	 * @throws JSONException
 	 */
-	@Get("json")
+	@Get()
 	public Representation getStocks() throws JSONException {
 		StructureSupermarche structureSupermarche = ((SupermarcheRestApp) getApplication()).getStructureSupermarche();
 		List<Rayon> rayons = structureSupermarche.getRayons();
