@@ -67,7 +67,8 @@ public class Caisse {
 		while (scannerProduit()) {
 		}
 		// Paiement
-		//System.out.println("Dernier article rencontré, passage au client suivant");
+		// System.out.println("Dernier article rencontré, passage au client
+		// suivant");
 		semaExclusionMutuelleAccesTapis.release();
 	}
 
@@ -77,17 +78,20 @@ public class Caisse {
 	 * @throws InterruptedException
 	 */
 	public void arriverALaCaisse(Client client) throws InterruptedException {
-		//System.out.println("Client " + client.getIdClient() + " attend a la caisse");
-		//System.out.println(
-		//	"Client " + client.getIdClient() + " - " + semaExclusionMutuelleAccesTapis.availablePermits());
+		// System.out.println("Client " + client.getIdClient() + " attend a la
+		// caisse");
+		// System.out.println(
+		// "Client " + client.getIdClient() + " - " +
+		// semaExclusionMutuelleAccesTapis.availablePermits());
 		// Lorsqu'un client arrive, le semaphore semaExclusionMutuelleAccesTapis
 		// lui donne l'acces au tapis s'il n'y a pas un autre client arrive
 		// avant lui.
 		client.setEtat(EtatClient.ATTENTE_CAISSE);
 		semaExclusionMutuelleAccesTapis.acquire();
 		client.setEtat(EtatClient.A_LA_CAISSE);
-		//System.out.println(
-			//	"\n==================\nClient " + client.getIdClient() + " passe en caisse");
+		// System.out.println(
+		// "\n==================\nClient " + client.getIdClient() + " passe en
+		// caisse");
 		// Une fois l'acces au tapis obtenu, le client attend que le caissier
 		// soit pret a le recevoir.
 		clientAttendCaissier();
@@ -128,14 +132,16 @@ public class Caisse {
 	 * @throws InterruptedException
 	 */
 	synchronized public void mettreProduitSurTapis(Produit produit) throws InterruptedException {
-		//System.out.println("Avant depot article - tapis: " + tapis.toString());
+		// System.out.println("Avant depot article - tapis: " +
+		// tapis.toString());
 		// Si tapis plein, on attend
 		while (tapis.size() == Supermarche.TAILLE_TAPIS)
 			wait();
 		// Le tapis a au moins un emplacement libre, on ajoute donc le produit a
 		// la fin du tapis
 		tapis.add(produit);
-		//System.out.println("Apres depot article - tapis: " + tapis.toString());
+		// System.out.println("Apres depot article - tapis: " +
+		// tapis.toString());
 		// Le client signale au caissier qu'un article a ete ajoute sur le
 		// tapis
 		notifyAll();
@@ -156,9 +162,9 @@ public class Caisse {
 	synchronized private boolean scannerProduit() throws InterruptedException {
 		while (tapis.size() == 0)
 			wait();
-		//System.out.println("Avant scan - tapis: " + tapis.toString());
+		// System.out.println("Avant scan - tapis: " + tapis.toString());
 		Produit articleScanne = tapis.removeFirst();
-		//System.out.println("Après scan - tapis: " + tapis.toString());
+		// System.out.println("Après scan - tapis: " + tapis.toString());
 		notifyAll();
 		return articleScanne != Produit.MARQUEUR_CLIENT_SUIVANT;
 	}

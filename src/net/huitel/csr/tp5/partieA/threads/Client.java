@@ -58,7 +58,8 @@ public class Client extends Thread {
 	/**
 	 * Methode representant le parcours des rayons et la prise de tous les
 	 * produits dont le client a besoin dans chaque rayon.
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 */
 	private void faireCourses() throws InterruptedException {
 		for (Rayon rayon : mStructureSupermarche.getRayons()) {
@@ -81,12 +82,14 @@ public class Client extends Thread {
 		// produits de son chariot sur le tapis
 		while (!chariot.isEmpty()) {
 			sleep(Supermarche.TPS_POSER_ARTICLE_SUR_TAPIS);
-			//System.out.println("Client " + idClient + " met " + chariot.get(0) + " sur le tapis");
+			// System.out.println("Client " + idClient + " met " +
+			// chariot.get(0) + " sur le tapis");
 
 			mStructureSupermarche.getCaisse().mettreProduitSurTapis(chariot.get(0));
 			chariot.remove(0);
 
-			//System.out.println("chariot client " + idClient + ": " + chariot.toString() + "\n");
+			// System.out.println("chariot client " + idClient + ": " +
+			// chariot.toString() + "\n");
 		}
 		// Lorsque le client a vide son chariot, il place sur le tapis le
 		// marqueur de client suivant
@@ -122,10 +125,9 @@ public class Client extends Thread {
 	public void setEtat(EtatClient mEtat) {
 		this.mEtat = mEtat;
 	}
-	
-	public HashMap<Produit, Integer> getListeCourses(){
+
+	public HashMap<Produit, Integer> getListeCourses() {
 		return mListeDeCourses;
 	}
-	
 
 }

@@ -25,8 +25,8 @@ public class ChefRayon extends Thread {
 
 	/**
 	 * Represente le fait d'aller dans l'entrepot pour remplir ses stocks de
-	 * {@link Supermarche#NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON} de
-	 * chaque produit disponible pour renflouer les rayons.
+	 * {@link Supermarche#NB_MAX_PRODUITS_PORTES_PAR_CHEF_RAYON} de chaque
+	 * produit disponible pour renflouer les rayons.
 	 * 
 	 * @throws InterruptedException
 	 */
