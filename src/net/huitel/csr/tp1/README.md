@@ -1,5 +1,5 @@
 # TP1
-Utilisation de Threads pour gérer une Usine avec des Ateliers et des Stocks
+Utilisation de mécanismes de synchronisation classiques pour gérer une simulation d'Usine avec des Ateliers et des Stocks
 
 ###Comment exécuter le TP:
 Dans la méthode Usine#main, passer en paramètre du constructeur Constantes.VERSION1, Constantes.VERSION2, Constantes.VERSION3 ou Constantes.VERSION4.
