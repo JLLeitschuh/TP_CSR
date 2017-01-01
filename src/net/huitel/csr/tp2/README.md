@@ -1,5 +1,5 @@
 # TP2
-Utilisation de Threads pour gérer un système d'emprunts de vélos avec des sites, des clients et un camion d'équilibrage.
+Utilisation de mécanismes de synchronisation classiques pour gérer un système d'emprunts de vélos avec des sites, des clients et un camion d'équilibrage.
 
-###Comment exécuter le TP:
-Run SystemeEmprunt.java
+###Exécution:
+Exécuter SystemeEmprunt comme une application Java.
