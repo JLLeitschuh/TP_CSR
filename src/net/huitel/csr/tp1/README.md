@@ -3,6 +3,7 @@ Utilisation de mécanismes de synchronisation classiques pour gérer une simulat
 
 ### Comment exécuter le TP:
 Dans la méthode Usine#main, passer en paramètre du constructeur Constantes.VERSION1, Constantes.VERSION2, Constantes.VERSION3 ou Constantes.VERSION4.
+Puis, exécuter Usine#main.
 
 #### VERSION1:
 2 Ateliers travaillent sur un stock de départ et un stock d'arrivée. 
